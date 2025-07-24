@@ -17,7 +17,7 @@ int cursor_x = 0;
 int cursor_y = 0;
 
 void init() {
-    set_screen_mode(ScreenMode::lores);
+    set_screen_mode(ScreenMode::hires);
 }
 
 void update(uint32_t time) {
@@ -32,6 +32,12 @@ void update(uint32_t time) {
     if (buttons.released & Button::B)
         board.toggle_flag(cursor_x, cursor_y);
 
+    // Reset the game when both A and B buttons are pressed together
+    if ((buttons.pressed & Button::A) && (buttons.pressed & Button::B)) {
+        board.reset();
+        cursor_x = 0;
+        cursor_y = 0;
+    }
     
 }
 

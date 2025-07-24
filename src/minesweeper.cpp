@@ -2,6 +2,11 @@
 
 void Board::initialize_board() {
     grid.resize(height, std::vector<Cell>(width));
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            grid[y][x] = Cell();
+        }
+    }
 }
 
 void Board::calculate_adjacent_mines() {
@@ -101,4 +106,12 @@ bool Board::is_game_over() const {
 
 bool Board::is_win() const {
     return revealed_count + flagged_count == width * height && mine_count == flagged_count;
+}
+
+void Board::reset() {
+    revealed_count = 0;
+    flagged_count = 0;
+    first_click = true;
+    game_over = false;
+    initialize_board();
 }

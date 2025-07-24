@@ -41,6 +41,7 @@ public:
     void toggle_flag(int x, int y);
     bool is_game_over() const;
     bool is_win() const;
+    void reset();
 };
 
 #endif // MINESWEEPER_HPP
