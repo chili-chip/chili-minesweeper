@@ -1,5 +1,7 @@
 #include "input.hpp"
 
+using namespace blit;
+
 Cursor::Cursor(int startX, int startY) : x(startX), y(startY) {}
 
 void Cursor::move_left() {
@@ -34,7 +36,7 @@ void Cursor::draw() {
     screen.line(Point(cx, cy + cs - 1), Point(cx + cs - 1, cy + cs - 1));
 }
 
-Input::Input(Board &b) : board(b) {}
+Input::Input(Minesweeper &b) : board(b) {}
 
 void Input::handle_cursor_movement() {
     if (buttons.pressed & Button::DPAD_LEFT) cursor.move_left();

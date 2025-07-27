@@ -6,6 +6,8 @@
 #include <random>
 #include <algorithm>
 #include <cmath>
+#include "32blit.hpp"
+#include "config.hpp"
 
 class Cell {
 public:
@@ -13,9 +15,12 @@ public:
     bool is_revealed = false;
     bool is_flagged = false;
     int adjacent_mines = 0;
+
+    Cell() = default;
+    void draw(int x, int y);
 };
 
-class Board {
+class Minesweeper {
 private:
     int width, height, mine_count;
     int revealed_count = 0;
@@ -35,13 +40,15 @@ private:
     void calculate_adjacent_mines();
     
 public:
-    Board(int w, int h, int mines);
+    Minesweeper(int w, int h, int mines);
     Cell get_cell(int x, int y);
     void reveal_cell(int x, int y);
     void toggle_flag(int x, int y);
     bool is_game_over() const;
     bool is_win() const;
     void reset();
+    void draw_game_over();
+    void draw();
 };
 
 #endif // MINESWEEPER_HPP

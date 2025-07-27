@@ -10,6 +10,6 @@ constexpr int screen_height = 128;
 constexpr int board_width = 16;
 constexpr int board_height = 15;
 constexpr int cell_size = screen_width / board_width;
-constexpr int mine_count = 20;
+constexpr int mine_count = 40;
 
 #endif // CONFIG_HPP

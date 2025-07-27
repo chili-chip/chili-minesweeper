@@ -6,8 +6,6 @@
 #include "minesweeper.hpp"
 #include "config.hpp"
 
-using namespace blit;
-
 class Cursor {
 private:
     int x, y = 0;
@@ -30,10 +28,10 @@ public:
 
 class Input {
 private:
-    Board &board;
+    Minesweeper &board;
 public:
     Cursor cursor;
-    Input(Board &b);
+    Input(Minesweeper &b);
     void handle_cursor_movement();
     void handle_cell_actions();
     void handle_game_reset();
