@@ -26,14 +26,7 @@ void Cursor::reset() {
 }
 
 void Cursor::draw() {
-    screen.pen = Pen(255, 255, 0);
-    int cx = (x * cell_size);
-    int cy = (y * cell_size);
-    int cs = cell_size;
-    screen.line(Point(cx, cy), Point(cx + cs - 1, cy));
-    screen.line(Point(cx, cy), Point(cx, cy + cs - 1));
-    screen.line(Point(cx + cs - 1, cy), Point(cx + cs - 1, cy + cs - 1));
-    screen.line(Point(cx, cy + cs - 1), Point(cx + cs - 1, cy + cs - 1));
+    screen.sprite(1, Point((x * cell_size) + 1, (y * cell_size) + 1 + header_height));
 }
 
 Input::Input(Minesweeper &b) : board(b) {}
@@ -46,15 +39,15 @@ void Input::handle_cursor_movement() {
 }
 
 void Input::handle_cell_actions() {
-    if (buttons.pressed & Button::A)
+    if (buttons.released & Button::A)
         board.reveal_cell(cursor.get_x(), cursor.get_y());
 
-    if (buttons.pressed & Button::B)
+    if (buttons.released & Button::B)
         board.toggle_flag(cursor.get_x(), cursor.get_y());
 }
 
 void Input::handle_game_reset() {
-    if (buttons.pressed) {
+    if ((buttons.released & Button::A) || (buttons.released & Button::B)) {
         board.reset();
         cursor.reset();
     }

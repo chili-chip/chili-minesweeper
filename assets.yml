@@ -5,4 +5,6 @@
 assets.cpp:
   assets/no-image.png:
     name: asset_no_image
+  assets/sprites.png:
+    name: asset_sprites  
 

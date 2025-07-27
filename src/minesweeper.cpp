@@ -3,25 +3,38 @@
 using namespace blit;
 
 void Cell::draw(int x, int y) {
-    Point pos((x * cell_size)+1, (y * cell_size)+1);
+    Point pos((x * cell_size)+1, (y * cell_size)+1+header_height);
 
     // Cell background
     if (is_revealed) {
-        screen.pen = is_mine ? Pen(180, 0, 0) : Pen(200, 200, 200);
+        screen.sprite(8, pos);
     } else {
-        screen.pen = Pen(80, 80, 80);
+        screen.sprite(7, pos);
     }
-    screen.rectangle(Rect(pos, Size(cell_size - 2, cell_size - 2)));
 
     // Text
     if (is_revealed && !is_mine && adjacent_mines > 0) {
-        screen.pen = Pen(0, 0, 0);
+        // Set text color based on number of adjacent mines
+        switch (adjacent_mines) {
+            case 1: screen.pen = Pen(0, 0, 255); break;      // Blue
+            case 2: screen.pen = Pen(0, 128, 0); break;      // Green
+            case 3: screen.pen = Pen(255, 0, 0); break;      // Red
+            case 4: screen.pen = Pen(0, 0, 128); break;      // Dark Blue
+            case 5: screen.pen = Pen(128, 0, 0); break;      // Dark Red
+            case 6: screen.pen = Pen(0, 128, 128); break;    // Teal
+            case 7: screen.pen = Pen(0, 0, 0); break;        // Black
+            case 8: screen.pen = Pen(128, 128, 128); break;  // Gray
+            default: screen.pen = Pen(0, 0, 0); break;
+        }
         screen.text(std::to_string(adjacent_mines), minimal_font, pos + Point(1, 0));
     }
 
+    if (is_revealed && is_mine) {
+        screen.sprite(2, pos);
+    }
+
     if (is_flagged) {
-        screen.pen = Pen(255, 255, 0);
-        screen.text("F", minimal_font, pos + Point(1, 0));
+        screen.sprite(0, pos);
     }
 
 }
@@ -99,14 +112,15 @@ void Minesweeper::reveal_cell(int x, int y) {
     Cell& cell = grid[y][x];
     if (cell.is_revealed || cell.is_flagged) return;
 
-    if (cell.is_mine) {
-        game_over = true;
-        return;
-    }
-
     // Reveal the cell
     cell.is_revealed = true;
     revealed_count++;
+
+    if (cell.is_mine) {
+        game_over = true;
+        reveal_all_mines();
+        return;
+    }
 
     // Reveal adjacent cells if no adjacent mines
     if (cell.adjacent_mines == 0) {
@@ -131,7 +145,7 @@ bool Minesweeper::is_game_over() const {
 }
 
 bool Minesweeper::is_win() const {
-    return revealed_count + flagged_count == width * height && mine_count == flagged_count;
+    return revealed_count + flagged_count == width * height && mine_count == flagged_count && !game_over;
 }
 
 void Minesweeper::reset() {
@@ -142,21 +156,36 @@ void Minesweeper::reset() {
     initialize_board();
 }
 
-void Minesweeper::draw_game_over() {
+void Minesweeper::draw_header() {
+    screen.sprite(0, Point(0, 0));
+    screen.pen = Pen(255, 255, 255);
+    screen.text(std::to_string(mine_count - flagged_count), minimal_font, Point(8, 1));
     if (is_game_over()) {
-        screen.pen = Pen(255, 0, 0);
-        screen.text("GAME OVER", minimal_font, Point(5, 120));
+        screen.sprite(5, Point(61, 0));
     } else if (is_win()) {
-        screen.pen = Pen(0, 255, 0);
-        screen.text("YOU WIN", minimal_font, Point(5, 120));
+        screen.sprite(6, Point(61, 0));
+    } else if ((buttons.state & Button::A) || (buttons.state & Button::B)) {
+        screen.sprite(4, Point(61, 0));
+    } else {
+        screen.sprite(3, Point(61, 0));
     }
 }
 
 void Minesweeper::draw() {
+    draw_header();
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             grid[y][x].draw(x, y);
         }
     }
-    draw_game_over();
+}
+
+void Minesweeper::reveal_all_mines() {
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            if (grid[y][x].is_mine) {
+                grid[y][x].is_revealed = true;
+            }
+        }
+    }
 }

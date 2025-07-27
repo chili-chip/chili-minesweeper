@@ -47,8 +47,9 @@ public:
     bool is_game_over() const;
     bool is_win() const;
     void reset();
-    void draw_game_over();
+    void draw_header();
     void draw();
+    void reveal_all_mines();
 };
 
 #endif // MINESWEEPER_HPP
