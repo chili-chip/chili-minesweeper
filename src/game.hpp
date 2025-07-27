@@ -5,6 +5,7 @@
 #include "minesweeper.hpp"
 #include "input.hpp"
 #include "assets.hpp"
+#include "timer.hpp"
 
 
 #endif // GAME_HPP

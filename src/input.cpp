@@ -26,7 +26,7 @@ void Cursor::reset() {
 }
 
 void Cursor::draw() {
-    screen.sprite(1, Point((x * cell_size) + 1, (y * cell_size) + 1 + header_height));
+    screen.sprite(1, Point((x * cell_size), (y * cell_size) + header_height));
 }
 
 Input::Input(Minesweeper &b) : board(b) {}
@@ -50,5 +50,7 @@ void Input::handle_game_reset() {
     if ((buttons.released & Button::A) || (buttons.released & Button::B)) {
         board.reset();
         cursor.reset();
+        GameTimer::reset();
+        GameTimer::start();
     }
 }

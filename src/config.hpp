@@ -12,5 +12,6 @@ constexpr int board_width = 16;
 constexpr int board_height = 15;
 constexpr int cell_size = screen_width / board_width;
 constexpr int mine_count = 40;
+constexpr int game_time_limit = 999;
 
 #endif // CONFIG_HPP

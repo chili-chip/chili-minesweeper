@@ -8,13 +8,16 @@ static Input input(board);
 void init() {
     set_screen_mode(ScreenMode::hires);
     screen.sprites = Surface::load(asset_sprites);
+    GameTimer::init();
+    GameTimer::start();
 }
 
 void update(uint32_t time) {
-    if (!board.is_game_over() && !board.is_win()) {
+    if (!board.is_game_over() && !board.is_win() && GameTimer::get_seconds() < game_time_limit) {
         input.handle_cursor_movement();
         input.handle_cell_actions();
     } else {
+        GameTimer::pause();
         input.handle_game_reset();
     }
 }

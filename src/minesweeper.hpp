@@ -8,6 +8,7 @@
 #include <cmath>
 #include "32blit.hpp"
 #include "config.hpp"
+#include "timer.hpp"
 
 class Cell {
 public:

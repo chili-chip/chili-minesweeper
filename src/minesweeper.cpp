@@ -3,7 +3,7 @@
 using namespace blit;
 
 void Cell::draw(int x, int y) {
-    Point pos((x * cell_size)+1, (y * cell_size)+1+header_height);
+    Point pos((x * cell_size), (y * cell_size)+header_height);
 
     // Cell background
     if (is_revealed) {
@@ -157,17 +157,18 @@ void Minesweeper::reset() {
 }
 
 void Minesweeper::draw_header() {
-    screen.sprite(0, Point(0, 0));
+    screen.sprite(0, Point(0, 0)); // Draw flag icon
     screen.pen = Pen(255, 255, 255);
-    screen.text(std::to_string(mine_count - flagged_count), minimal_font, Point(8, 1));
+    screen.text(std::to_string(mine_count - flagged_count), minimal_font, Point(8, 1), false); // Draw remaining mines
+    screen.text(std::to_string(GameTimer::get_seconds()), minimal_font, Point(127, 1), false, top_right); // Draw timer
     if (is_game_over()) {
-        screen.sprite(5, Point(61, 0));
+        screen.sprite(5, Point(61, 0)); // Draw game over emoji
     } else if (is_win()) {
-        screen.sprite(6, Point(61, 0));
-    } else if ((buttons.state & Button::A) || (buttons.state & Button::B)) {
-        screen.sprite(4, Point(61, 0));
+        screen.sprite(6, Point(61, 0)); // Draw win emoji
+    } else if ((buttons.state & Button::A)) {
+        screen.sprite(4, Point(61, 0)); // Draw suprised emoji
     } else {
-        screen.sprite(3, Point(61, 0));
+        screen.sprite(3, Point(61, 0)); // Draw normal emoji
     }
 }
 
