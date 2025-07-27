@@ -1,20 +1,9 @@
 #include "game.hpp"
-#include "minesweeper.hpp"
 
 using namespace blit;
 
-// Screen and board configuration
-constexpr int screen_size = 128;
-constexpr int board_width = 16;
-constexpr int board_height = 15;
-constexpr int cell_size = screen_size / 16;
-constexpr int mine_count = 20;
-
 static Board board(board_width, board_height, mine_count);
-
-// Cursor state
-int cursor_x = 0;
-int cursor_y = 0;
+static Input input(board);
 
 void draw_cell(int x, int y, const Cell &cell) {
     Point pos((x * cell_size)+1, (y * cell_size)+1);
@@ -39,17 +28,6 @@ void draw_cell(int x, int y, const Cell &cell) {
     }
 }
 
-void draw_cursor() {
-    screen.pen = Pen(255, 255, 0);
-    int cx = (cursor_x * cell_size);
-    int cy = (cursor_y * cell_size);
-    int cs = cell_size;
-    screen.line(Point(cx, cy), Point(cx + cs - 1, cy));
-    screen.line(Point(cx, cy), Point(cx, cy + cs - 1));
-    screen.line(Point(cx + cs - 1, cy), Point(cx + cs - 1, cy + cs - 1));
-    screen.line(Point(cx, cy + cs - 1), Point(cx + cs - 1, cy + cs - 1));
-}
-
 void draw_status_text() {
     if (board.is_game_over()) {
         screen.pen = Pen(255, 0, 0);
@@ -60,40 +38,17 @@ void draw_status_text() {
     }
 }
 
-void handle_cursor_movement() {
-    if (buttons.pressed & Button::DPAD_LEFT) cursor_x = std::max(0, cursor_x - 1);
-    if (buttons.pressed & Button::DPAD_RIGHT) cursor_x = std::min(board_width - 1, cursor_x + 1);
-    if (buttons.pressed & Button::DPAD_UP) cursor_y = std::max(0, cursor_y - 1);
-    if (buttons.pressed & Button::DPAD_DOWN) cursor_y = std::min(board_height - 1, cursor_y + 1);
-}
-
-void handle_cell_actions() {
-    if (buttons.pressed & Button::A)
-        board.reveal_cell(cursor_x, cursor_y);
-
-    if (buttons.pressed & Button::B)
-        board.toggle_flag(cursor_x, cursor_y);
-}
-
-void handle_game_reset() {
-    if (buttons.pressed) {
-        board.reset();
-        cursor_x = 0;
-        cursor_y = 0;
-    }
-}
-
 void init() {
     set_screen_mode(ScreenMode::hires);
 }
 
 void update(uint32_t time) {
     if (board.is_game_over() || board.is_win()) {
-        handle_game_reset();
+        input.handle_game_reset();
         return;
     }
-    handle_cursor_movement();
-    handle_cell_actions();
+    input.handle_cursor_movement();
+    input.handle_cell_actions();
 }
 
 void render(uint32_t time) {
@@ -106,6 +61,6 @@ void render(uint32_t time) {
         }
     }
 
-    draw_cursor();
+    input.cursor.draw();
     draw_status_text();
 }

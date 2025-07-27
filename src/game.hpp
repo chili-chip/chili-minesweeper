@@ -3,6 +3,7 @@
 
 #include "32blit.hpp"
 #include "minesweeper.hpp"
+#include "input.hpp"
 
 
 #endif // GAME_HPP
