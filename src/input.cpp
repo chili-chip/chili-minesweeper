@@ -51,6 +51,5 @@ void Input::handle_game_reset() {
         board.reset();
         cursor.reset();
         GameTimer::reset();
-        GameTimer::start();
     }
 }

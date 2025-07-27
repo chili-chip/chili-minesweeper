@@ -9,7 +9,6 @@ void init() {
     set_screen_mode(ScreenMode::hires);
     screen.sprites = Surface::load(asset_sprites);
     GameTimer::init();
-    GameTimer::start();
 }
 
 void update(uint32_t time) {

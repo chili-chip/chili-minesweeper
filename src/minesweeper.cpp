@@ -106,6 +106,7 @@ void Minesweeper::reveal_cell(int x, int y) {
     if (first_click) {
         place_mines(x, y);
         calculate_adjacent_mines();
+        GameTimer::start();
         first_click = false;
     }
 
