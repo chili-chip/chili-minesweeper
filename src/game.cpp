@@ -61,22 +61,22 @@ void draw_status_text() {
 }
 
 void handle_cursor_movement() {
-    if (buttons.released & Button::DPAD_LEFT) cursor_x = std::max(0, cursor_x - 1);
-    if (buttons.released & Button::DPAD_RIGHT) cursor_x = std::min(board_width - 1, cursor_x + 1);
-    if (buttons.released & Button::DPAD_UP) cursor_y = std::max(0, cursor_y - 1);
-    if (buttons.released & Button::DPAD_DOWN) cursor_y = std::min(board_height - 1, cursor_y + 1);
+    if (buttons.pressed & Button::DPAD_LEFT) cursor_x = std::max(0, cursor_x - 1);
+    if (buttons.pressed & Button::DPAD_RIGHT) cursor_x = std::min(board_width - 1, cursor_x + 1);
+    if (buttons.pressed & Button::DPAD_UP) cursor_y = std::max(0, cursor_y - 1);
+    if (buttons.pressed & Button::DPAD_DOWN) cursor_y = std::min(board_height - 1, cursor_y + 1);
 }
 
 void handle_cell_actions() {
-    if (buttons.released & Button::A)
+    if (buttons.pressed & Button::A)
         board.reveal_cell(cursor_x, cursor_y);
 
-    if (buttons.released & Button::B)
+    if (buttons.pressed & Button::B)
         board.toggle_flag(cursor_x, cursor_y);
 }
 
 void handle_game_reset() {
-    if ((buttons.pressed & Button::A) && (buttons.pressed & Button::B)) {
+    if (buttons.pressed) {
         board.reset();
         cursor_x = 0;
         cursor_y = 0;
@@ -88,9 +88,12 @@ void init() {
 }
 
 void update(uint32_t time) {
+    if (board.is_game_over() || board.is_win()) {
+        handle_game_reset();
+        return;
+    }
     handle_cursor_movement();
     handle_cell_actions();
-    handle_game_reset();
 }
 
 void render(uint32_t time) {
