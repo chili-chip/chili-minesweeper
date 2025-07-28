@@ -13,6 +13,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+
 env:
   BUILD_TYPE: Release
   EM_VERSION: 2.0.18 # Emscripten version
