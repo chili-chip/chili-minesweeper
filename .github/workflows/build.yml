@@ -192,8 +192,12 @@ jobs:
     - name: Create Pages directory
       run: |
         mkdir -p pages
-        # Copy web build files to pages directory
-        cp -r web-build/* pages/ || true
+        # Check if the web-build directory exists before copying
+        if [ -d "web-build" ]; then
+          cp -r web-build/* pages/
+        else
+          echo "Warning: web-build directory does not exist. Skipping copy step."
+        fi
         # Use the template file if index.html doesn't exist
         if [ ! -f pages/index.html ]; then
           cp main/.github/pages-template.html pages/index.html
