@@ -47,7 +47,7 @@ void Input::handle_cell_actions() {
 }
 
 void Input::handle_game_reset() {
-    if ((buttons.released & Button::A) || (buttons.released & Button::B)) {
+    if ((buttons.released & Button::A)) {
         board.reset();
         cursor.reset();
         GameTimer::reset();
