@@ -6,6 +6,7 @@
 #include <random>
 #include <algorithm>
 #include <cmath>
+#include <chrono>
 #include "32blit.hpp"
 #include "config.hpp"
 #include "timer.hpp"

@@ -81,7 +81,9 @@ void Minesweeper::place_mines(int safeX, int safeY) {
     }
 
     // Step 2: Shuffle
-    std::shuffle(positions.begin(), positions.end(), std::mt19937{std::random_device{}()});
+    // Use a time-based seed instead of std::random_device to avoid getentropy dependency on embedded systems
+    auto seed = static_cast<unsigned int>(std::chrono::steady_clock::now().time_since_epoch().count());
+    std::shuffle(positions.begin(), positions.end(), std::mt19937{seed});
 
     // Step 3: Place mines
     for (int i = 0; i < mine_count && i < (int)positions.size(); ++i) {
