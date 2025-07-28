@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chili Minesweeper</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            background: #222; 
+            color: white; 
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        canvas { 
+            border: 1px solid #555; 
+            display: block; 
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .info {
+            margin: 10px 0;
+            color: #ccc;
+            font-size: 14px;
+        }
+        .controls {
+            margin: 20px 0;
+            color: #ccc;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chili Minesweeper</h1>
+    <div class="info">A 32Blit game built with Emscripten</div>
+    <canvas id="canvas" width="320" height="240"></canvas>
+    <div class="controls">
+        Use arrow keys to navigate, X to reveal, Z to flag
+    </div>
+    <script src="{{SCRIPT_FILENAME}}"></script>
+    <!-- Replace {{SCRIPT_FILENAME}} with the actual output filename from the Emscripten build -->
+</body>
+</html>

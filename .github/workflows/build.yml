@@ -15,6 +15,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 env:
   BUILD_TYPE: Release
@@ -157,3 +159,58 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: ${{runner.workspace}}/main/build/${{env.RELEASE_FILE}}.zip
+
+    # Upload web build artifacts for Pages deployment
+    - name: Upload web build artifact
+      if: github.event_name == 'release' && matrix.name == 'Emscripten'
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-build
+        path: ${{runner.workspace}}/main/build/
+
+  # Deploy to GitHub Pages
+  deploy-pages:
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: Checkout for template
+      uses: actions/checkout@v4
+      with:
+        path: main
+
+    - name: Download web build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: web-build
+        path: ./web-build
+
+    - name: Create Pages directory
+      run: |
+        mkdir -p pages
+        # Check if the web-build directory exists before copying
+        if [ -d "web-build" ]; then
+          cp -r web-build/* pages/
+        else
+          echo "Warning: web-build directory does not exist. Skipping copy step."
+        fi
+        # Use the template file if index.html doesn't exist
+        if [ ! -f pages/index.html ]; then
+          cp main/.github/pages-template.html pages/index.html
+        fi
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload to Pages
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./pages
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
