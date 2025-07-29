@@ -146,29 +146,29 @@ jobs:
           name: emscripten-build
           path: ${{runner.workspace}}/main/build
 
-deploy-pages:
-  if: github.ref == 'refs/heads/main'
-  needs: build
-  runs-on: ubuntu-latest
+  deploy-pages:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
 
-  permissions:
-    pages: write
-    id-token: write
+    permissions:
+      pages: write
+      id-token: write
 
-  steps:
-    - name: Download Emscripten build artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: emscripten-build
-        path: web-build
+    steps:
+      - name: Download Emscripten build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: emscripten-build
+          path: web-build
 
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
-    - name: Upload to GitHub Pages
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: web-build
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web-build
 
-    - name: Deploy GitHub Pages
-      uses: actions/deploy-pages@v4
+      - name: Deploy GitHub Pages
+        uses: actions/deploy-pages@v4
