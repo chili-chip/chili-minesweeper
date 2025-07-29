@@ -171,9 +171,9 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v4
         with:
           path: web-build
 
       - name: Deploy GitHub Pages
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
