@@ -2,8 +2,6 @@
 
 using namespace blit;
 
-Cursor::Cursor(int startX, int startY) : x(startX), y(startY) {}
-
 void Cursor::move_left() {
     x = std::max(0, x - 1);
 }
@@ -29,7 +27,9 @@ void Cursor::draw() {
     screen.sprite(1, Point((x * cell_size), (y * cell_size) + header_height));
 }
 
-Input::Input(Minesweeper &b) : board(b) {}
+Input::Input(Minesweeper &b) : board(b) {
+    cursor.reset();
+}
 
 void Input::handle_cursor_movement() {
     if (buttons.pressed & Button::DPAD_LEFT) cursor.move_left();

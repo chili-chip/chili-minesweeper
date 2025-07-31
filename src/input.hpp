@@ -11,7 +11,6 @@ private:
     int x, y = 0;
 public:
     Cursor() = default;
-    Cursor(int startX, int startY);
     void move_left();
     void move_right();
     void move_up();
