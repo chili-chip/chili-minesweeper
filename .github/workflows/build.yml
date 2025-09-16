@@ -7,6 +7,9 @@ on:
   pull_request:
   release:
     types: [published]
+    
+permissions:
+  contents: write
 
 env:
   BUILD_TYPE: Release
@@ -40,6 +43,12 @@ jobs:
             cmake-prefix: emcmake
             apt-packages: python3-setuptools
 
+          - os: ubuntu-22.04
+            name: VGC
+            release-suffix: VGC
+            cmake-args: -D32BLIT_DIR=$GITHUB_WORKSPACE/32blit-sdk -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk -DPICO_BOARD=chilichip_vgc -DPICO_PLATFORM=rp2350-arm-s -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/32blit-sdk/pico2.toolchain
+            apt-packages: gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib python3-setuptools
+
           - os: macos-latest
             name: macOS
             release-suffix: MACOS
@@ -49,7 +58,7 @@ jobs:
           - os: windows-latest
             name: Visual Studio
             release-suffix: WIN64
-            cmake-args: -D32BLIT_DIR=$GITHUB_WORKSPACE/32blit-sdk
+            cmake-args: -D32BLIT_DIR=$GITHUB_WORKSPACE/32blit-sdk -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
     runs-on: ${{matrix.os}}
 
@@ -67,6 +76,21 @@ jobs:
         with:
           repository: chili-chip/32blit-sdk
           path: 32blit-sdk
+
+      - name: Checkout Pico SDK
+        if: matrix.name == 'VGC'
+        uses: actions/checkout@v4
+        with:
+          repository: chili-chip/pico-sdk
+          path: pico-sdk
+          submodules: true
+
+      - name: Checkout Pico Extras
+        if: matrix.name == 'VGC'
+        uses: actions/checkout@v4
+        with:
+          repository: chili-chip/pico-extras
+          path: pico-extras
 
       - name: Install Linux deps
         if: runner.os == 'Linux'
