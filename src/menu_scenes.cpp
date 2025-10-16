@@ -19,7 +19,7 @@ void MenuScene::update() {
     if (buttons.released & Button::A) {
         switch (option_selected) {
             case 0: // Game
-                finish(new GameScene(16, 16, 40));
+                finish(new GameScene(board_width, board_height, 40));
                 break;
             case 1: // Credits
                 finish(new CreditsScene());
