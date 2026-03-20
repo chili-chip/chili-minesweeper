@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.10)
 
 project(minesweeper)
 
@@ -11,17 +11,18 @@ if(MSVC)
   add_compile_options("/W4" "/wd4244" "/wd4324" "/wd4458" "/wd4100")
 else()
   add_compile_options("-Wall" "-Wextra" "-Wdouble-promotion" "-Wno-unused-parameter")
-  
-  # Add debug build type with sanitizers
-  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_options("-fsanitize=address" "-fsanitize=leak" "-g" "-O0")
-    add_link_options("-fsanitize=address" "-fsanitize=leak")
-  endif()
 endif()
 
 find_package (32BLIT CONFIG REQUIRED PATHS ../32blit-sdk $ENV{PATH_32BLIT_SDK})
 
 blit_executable (${PROJECT_NAME} ${PROJECT_SOURCE})
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+  set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
+else()
+  set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".elf")
+endif()
+
 blit_assets_yaml (${PROJECT_NAME} assets.yml)
 blit_metadata (${PROJECT_NAME} metadata.yml)
 add_custom_target (flash DEPENDS ${PROJECT_NAME}.flash)
