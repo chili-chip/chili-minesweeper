@@ -4,6 +4,8 @@
 #include "32blit.hpp"
 #include <vector>
 #include <cstdint>
+#include <sstream>  // CRITICAL: Fixes the "incomplete type" error
+#include <cmath>    // CRITICAL: For the pow() function
 
 // --- Frequency Definitions (Standard Pitch A4 = 440Hz) ---
 #define REST    0
@@ -67,6 +69,7 @@ struct Note {
 class Music {
 public:
     Music(const Note* melody, size_t count);
+    Music(const std::string& rtttl);
 
     // Configuration
     void set_adsr(uint16_t a, uint16_t d, uint16_t s, uint16_t r);
@@ -85,6 +88,7 @@ public:
     void update(uint32_t dt, blit::AudioChannel& channel);
 
 private:
+    std::vector<Note> m_dynamic_melody;
     const Note* m_melody;
     size_t m_count;
     size_t m_index = 0;

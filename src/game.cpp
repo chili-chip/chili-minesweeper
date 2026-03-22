@@ -3,19 +3,8 @@
 
 using namespace blit;
 
-// A "Thinker's" melody in A-Minor
-static const Note minesweeper_theme[] = {
-    {NOTE_A4, EN}, {NOTE_E5, EN}, {NOTE_A4, EN}, {NOTE_E5, EN},
-    {NOTE_G4, EN}, {NOTE_D5, EN}, {NOTE_G4, EN}, {NOTE_D5, EN},
-    {NOTE_F4, EN}, {NOTE_C5, EN}, {NOTE_F4, EN}, {NOTE_C5, EN},
-    {NOTE_E4, QN}, {NOTE_B4, QN}, {REST,    QN},
-    
-    // Variation bridge
-    {NOTE_A4, SN}, {NOTE_B4, SN}, {NOTE_C5, EN}, {NOTE_B4, EN}, {NOTE_A4, EN},
-    {NOTE_G4, QN}, {NOTE_E4, QN}, {REST,    QN}
-};
-
-Music bgm(minesweeper_theme, sizeof(minesweeper_theme) / sizeof(Note));
+std::string bg_theme = "jamesbond:d=4,o=6,b=112:16c.5,32d.5,32d.5,16d.5,8d.5,16c.5,16c.5,16c.5,16c.5,32d#.5,32d#.5,16d#.5,8d#.5,16d.5,16d.5,16d.5,16c.5,32d.5,32d.5,16d.5,8d.5,16c.5,16c.5,16c.5,16c.5,32d#.5,32d#.5,16d#.5,8d#.5,16d.5,16d.5,16d.5,16c.5,32d.5,32d.5,16d.5,8d.5,16c.5,16c.5,16c.5,16c.5,32d#.5,32d#.5,16d#.5,8d#.5,16d.5,16d.5,16c.5,16b.5,2a#5,16g.5,16f.5,2g.5";
+Music bgm(bg_theme);
 MusicManager audioSystem;
 
 // Global scene pointer - this is the only global variable we need
@@ -29,15 +18,9 @@ void init() {
     current_scene = new MenuScene();
     current_scene->enter();
 
-    // Voice setup: Short attack and long decay for a "plinky" sound
-    bgm.set_adsr(10, 50, 0x2000, 50);
     bgm.set_waveform(blit::Waveform::SQUARE);
-    bgm.set_volume(100);
-
-    // Add to channel 0
+    bgm.set_volume(3000);
     audioSystem.add_track(0, &bgm);
-    
-    // Start the background loop
     bgm.play();
 }
 
