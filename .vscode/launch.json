@@ -7,7 +7,7 @@
             "request": "launch",
             "servertype": "openocd",
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceFolder}/out/build/vgc/game.elf",
+            "executable": "${workspaceFolder}/out/build/vgc/minesweeper.elf",
             "device": "RP2350",
             "interface": "swd",
             "configFiles": [
@@ -19,7 +19,7 @@
             "runToEntryPoint": "main",
             "overrideLaunchCommands": [
                 "monitor reset init",
-                "load \"${workspaceFolder}/out/build/vgc/game.elf\""
+                "load \"${workspaceFolder}/out/build/vgc/minesweeper.elf\""
             ],
             "openOCDLaunchCommands": [
                 "adapter speed 5000"
