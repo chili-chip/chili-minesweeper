@@ -1,5 +1,7 @@
 #include "music.hpp"
 
+#include <cmath>
+
 using namespace blit;
 
 // --- Music Implementation ---
@@ -85,8 +87,8 @@ Music::Music(const std::string& rtttl) {
             }
             if (sharp) note_idx++;
             
-            // Formula: Freq = Base * 2^Octave
-            freq = static_cast<uint32_t>(notes[note_idx] * pow(2, octave));
+            // Formula: Freq = Base * 2^Octave (ldexp keeps it in float, which -Wdouble-promotion requires)
+            freq = static_cast<uint32_t>(std::ldexp(notes[note_idx], octave));
         }
 
         uint32_t dur_ms = wholenote / duration;
