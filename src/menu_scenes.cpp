@@ -52,7 +52,7 @@ void MenuScene::render() {
     // Draw difficulty info for selected option
     screen.pen = Pen(200, 200, 200);
     switch(option_selected) {
-        case 0: screen.text("16x16, 40 mines", minimal_font, Point(64, 100), true, center_center); break;
+        case 0: screen.text("16x15, 40 mines", minimal_font, Point(64, 100), true, center_center); break;
         case 1: screen.text("Game info", minimal_font, Point(64, 100), true, center_center); break;
     }
     
