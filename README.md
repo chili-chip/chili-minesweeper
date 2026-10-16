@@ -6,18 +6,34 @@ The classic logic puzzle for the ChiliChip **VGC Zero** (128x128), built on the
 [chilichip fork of the 32blit SDK](https://github.com/chili-chip/32blit-sdk).
 It also runs on desktop (SDL) and in the browser: [play it on chilichip.eu](https://chilichip.eu/games/minesweeper/).
 
-Clear a 16x15 board hiding 40 mines. Numbers tell you how many mines touch each cell; flag the
-ones you've found and reveal everything else. Your first reveal is always safe, and the clock
-stops at 999 seconds.
+![Gameplay](docs/gameplay.gif)
+
+Numbers tell you how many mines touch each cell. Flag the mines and reveal everything else as
+fast as you can. Your first reveal is always safe and always opens an area.
+
+## Features
+
+- Four levels: **Easy** 9x9 with 10 mines, **Medium** 12x12 with 24, **Hard** 16x15 with 40 and
+  **Expert** 16x15 with 50. Smaller boards get bigger cells.
+- Chording: press A (or B) on a number once all its mines are flagged to open the cells around it.
+- Top-five best times per level with 3-letter initials, plus games won and win streaks.
+- Original chiptune soundtrack (title theme, a calm in-game loop that picks up as the board
+  clears, win and lose jingles) and sound effects, all synthesised on the 32blit audio channels.
+  Music and sound can be turned off in the menu.
+- Ripple reveals, a chain-reaction explosion with screen shake, confetti on a win, and a
+  self-playing board behind the menus.
+- Pause hides the board, so no peeking while the clock is stopped.
+
+Settings, best times and stats are saved.
 
 ## Controls
 
 | Button | Menu | In game | After a win or loss |
 | --- | --- | --- | --- |
-| D-pad | Choose an option | Move the cursor | |
-| A | Select | Reveal the cell | New game |
-| B | | Flag or unflag the cell | Back to the menu |
-| MENU | | Back to the menu | Back to the menu |
+| D-pad | Choose an option, left/right changes it | Move the cursor (hold to repeat, wraps at the edges) | |
+| A | Select | Reveal the cell, or chord on a number | Play again |
+| B | Back | Flag or unflag the cell, or chord on a number | Back to the menu |
+| MENU | Back | Pause (resume, restart or quit) | Back to the menu |
 
 On desktop: arrow keys or WASD, **Z** = A, **X** = B, **Esc** = MENU.
 
@@ -25,16 +41,26 @@ On desktop: arrow keys or WASD, **Z** = A, **X** = B, **Esc** = MENU.
 
 | File | What |
 | --- | --- |
-| `src/game.cpp` | 32blit `init`/`update`/`render`, background music and the active scene |
-| `src/menu_scenes.cpp` | Menu, credits and game scenes |
-| `src/minesweeper.cpp` | Board rules: mine placement, flood reveal, flags, win and loss, header drawing |
-| `src/input.cpp` | Cursor movement and cell actions |
-| `src/music.cpp` | RTTTL tune player on the 32blit audio channels |
-| `src/timer.cpp` | Game clock |
-| `src/config.hpp` | Board size, mine count and time limit |
-| `assets/sprites.png` | Cells, cursor, flag and face sprites |
+| `src/game.cpp` | 32blit `init`/`update`/`render`, scenes (menu, play, pause, results, name entry) |
+| `src/board.cpp` | Board rules: mine placement, flood reveal, flags, chording, win and loss. No 32blit dependency |
+| `src/render.cpp` | Drawing: cells, header, effects, logo and text helpers |
+| `src/audio.cpp` | Soundtrack sequencer and sound effects |
+| `src/save.cpp` | Levels, settings, best times and stats |
+| `tests/` | Host-side unit tests for the board rules |
+| `tools/make_art.py` | Generates the launcher splash and icon |
+| `assets/sprites.png` | Header faces |
 
 Only `src/` is compiled; the top-level `game.cpp` / `game.hpp` are unused leftovers from the template.
+
+## Tests
+
+The board rules build and run on the host without the SDK:
+```
+cmake -S tests -B build-tests
+cmake --build build-tests
+ctest --test-dir build-tests --output-on-failure
+```
+CI runs them on every push.
 
 ## Building
 
