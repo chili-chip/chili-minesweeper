@@ -13,6 +13,12 @@ any new projects.
 It's based on the original `template` project from the 
 [32blit-boilerplate](https://github.com/32blit/32blit-boilerplate), with added support for chilichip's vgc zero.
 
+## Getting started
+
+If this is your first 32blit game, follow the [Linux quickstart](https://chilichip.eu/docs/game-sdk/quickstart/linux-quickstart/)
+on chilichip.eu first. It installs the toolchain and clones `32blit-sdk`, `pico-sdk` and `pico-extras` next to your game.
+CMake 3.28 or newer is needed to use the presets in `CMakePresets.json` (`vgc`, `vgc-blit`, `linux`).
+
 ## Usage
 
 [Use this template](https://github.com/chili-chip/game-template/generate) to
@@ -130,3 +136,15 @@ To flash a standalone build to the console using the Pico Debugger over SWD:
 cd build
 openocd -f interface/cmsis-dap.cfg -f target/rp2350.cfg -c "adapter speed 5000; program "game.elf" verify reset exit"
 ```
+
+## Contributing to this template
+
+This repo has two audiences:
+
+- **Making a game?** Click [Use this template](https://github.com/chili-chip/game-template/generate) and work in your
+  own repository. Problems with your game belong there.
+- **Improving the template itself?** Open an issue or pull request here. Changes that every new game should get belong
+  in this repo: build setup, CMake presets, CI, the asset pipeline and these docs. SDK bugs and features go to
+  [32blit-sdk](https://github.com/chili-chip/32blit-sdk) instead.
+
+The placeholder name in `LICENSE` is intentional: each game sets its own.
