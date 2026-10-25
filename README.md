@@ -90,3 +90,5 @@ This produces a `.uf2` you can copy onto the console's `RP2350` drive. To build 
 ## Licence
 
 MIT, see [LICENSE](LICENSE).
+
+The project setup comes from the [32blit boilerplate](https://github.com/32blit/32blit-boilerplate), and the game runs on the [32blit SDK](https://github.com/32blit/32blit-sdk) (MIT, © Pimoroni Ltd and the 32blit contributors). Thanks to them.
